@@ -12,4 +12,9 @@ public class PedidoExpress extends Pedido {
         }
         return tiempo;
     }
+
+    @Override
+    public void asignarRepartidor() {
+        System.out.println("Pedido #" + idPedido + " (Express): buscando repartidor más cercano con disponibilidad inmediata...");
+    }
 }
