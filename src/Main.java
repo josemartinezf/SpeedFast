@@ -1,35 +1,44 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 public class Main {
     public static void main(String[] args) {
-        Pedido pedido1 = new PedidoComida(1, "Av. Alemania 123, Puerto Varas", 3.5);
-        Pedido pedido2 = new PedidoEncomienda(2, "Ruta 225, Frutillar", 12.0);
-        Pedido pedido3 = new PedidoExpress(3, "Camino Real 456, Puerto Montt", 7.2);
+        // Pedidos del repartidor 1
+        List<Pedido> pedidos1 = new ArrayList<>();
+        pedidos1.add(new PedidoComida(1, "Av. Alemania 123, Puerto Varas", 3.5));
+        pedidos1.add(new PedidoExpress(2, "Camino Real 456, Puerto Montt", 7.2));
 
-        ControladorDeEnvios controlador = new ControladorDeEnvios();
+        // Pedidos del repartidor 2
+        List<Pedido> pedidos2 = new ArrayList<>();
+        pedidos2.add(new PedidoEncomienda(3, "Ruta 225, Frutillar", 12.0));
+        pedidos2.add(new PedidoComida(4, "Av. Vicente Pérez Rosales 200, Puerto Varas", 2.1));
 
-        System.out.println("=== Asignación automática (sobrescritura) ===");
-        pedido1.asignarRepartidor();
-        pedido2.asignarRepartidor();
-        pedido3.asignarRepartidor();
+        // Pedidos del repartidor 3
+        List<Pedido> pedidos3 = new ArrayList<>();
+        pedidos3.add(new PedidoExpress(5, "Los Colonos 789, Puerto Varas", 4.0));
+        pedidos3.add(new PedidoEncomienda(6, "Costanera 321, Frutillar", 9.5));
 
-        System.out.println("\n=== Asignación manual (sobrecarga) ===");
-        pedido1.asignarRepartidor("Carlos Muñoz");
-        pedido2.asignarRepartidor("Fernanda Soto");
-        pedido3.asignarRepartidor("Ignacio Pérez");
+        Repartidor repartidor1 = new Repartidor("Carlos Muñoz", pedidos1);
+        Repartidor repartidor2 = new Repartidor("Fernanda Soto", pedidos2);
+        Repartidor repartidor3 = new Repartidor("Ignacio Pérez", pedidos3);
 
-        System.out.println("\n=== Tiempos estimados ===");
-        pedido1.mostrarResumen();
-        System.out.println("Tiempo estimado: " + pedido1.calcularTiempoEntrega() + " min");
-        pedido2.mostrarResumen();
-        System.out.println("Tiempo estimado: " + pedido2.calcularTiempoEntrega() + " min");
-        pedido3.mostrarResumen();
-        System.out.println("Tiempo estimado: " + pedido3.calcularTiempoEntrega() + " min");
+        ExecutorService executor = Executors.newFixedThreadPool(3);
 
-        System.out.println("\n=== Despacho y cancelación ===");
-        controlador.despachar(pedido1);
-        controlador.despachar(pedido2);
-        controlador.cancelar(pedido3);
+        executor.execute(repartidor1);
+        executor.execute(repartidor2);
+        executor.execute(repartidor3);
 
-        System.out.println();
-        controlador.verHistorial();
+        executor.shutdown();
+
+        try {
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\nTodas las entregas han finalizado.");
     }
 }
