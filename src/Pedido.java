@@ -1,44 +1,45 @@
+package main;
+
 public class Pedido {
-    private int id;
+    private int idPedido;
     private String direccionEntrega;
-    private EstadoPedido estado;
+    private String tipoPedido;
+    private String repartidorAsignado;
+    private String estado;
 
-    public Pedido(int id, String direccionEntrega) {
-        this.id = id;
+    public Pedido(int idPedido, String direccionEntrega, String tipoPedido) {
+        this.idPedido = idPedido;
         this.direccionEntrega = direccionEntrega;
-        this.estado = EstadoPedido.PENDIENTE;
+        this.tipoPedido = tipoPedido;
+        this.repartidorAsignado = "Sin asignar";
+        this.estado = "PENDIENTE";
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public int getIdPedido() {
+        return idPedido;
     }
 
     public String getDireccionEntrega() {
         return direccionEntrega;
     }
 
-    public void setDireccionEntrega(String direccionEntrega) {
-        this.direccionEntrega = direccionEntrega;
+    public String getTipoPedido() {
+        return tipoPedido;
     }
 
-    public EstadoPedido getEstado() {
+    public String getRepartidorAsignado() {
+        return repartidorAsignado;
+    }
+
+    public void setRepartidorAsignado(String repartidorAsignado) {
+        this.repartidorAsignado = repartidorAsignado;
+    }
+
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(String nuevoEstado) {
-        this.estado = EstadoPedido.valueOf(nuevoEstado);
-    }
-
-    public void setEstado(EstadoPedido nuevoEstado) {
-        this.estado = nuevoEstado;
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido #" + id + " | Dirección: " + direccionEntrega + " | Estado: " + estado;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
